@@ -12,14 +12,14 @@ export const fetchError = () => {
   throw new Error("There was an error fetching your data");
 };
 
-const throwErrorResponse = resp => {
+const throwErrorResponse = (resp) => {
   throw resp;
 };
 
-const qs = params =>
-  Object.entries(params).length ? `?${queryString.stringify(params)}` : "";
+const qs = (params) =>
+  Object.entries(params).length ? `&${queryString.stringify(params)}` : "";
 
-const processResponse = async resp => {
+const processResponse = async (resp) => {
   try {
     const body = await resp.json();
 

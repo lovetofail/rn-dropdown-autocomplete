@@ -1,12 +1,17 @@
-import React, {Component, Fragment} from "react";
-import {findNodeHandle, ActivityIndicator, TextInput, View} from "react-native";
-import {string, bool, number, func} from "prop-types";
+import React, { Component, Fragment } from "react";
+import {
+  findNodeHandle,
+  ActivityIndicator,
+  TextInput,
+  View,
+} from "react-native";
+import { string, bool, number, func } from "prop-types";
 import Dropdown from "../Dropdown";
-import {capitalizeFirstLetter} from "../../utils/string";
-import {styles} from "./Autocomplete.styles";
-import {get} from "../../utils/api";
-import {WAIT_INTERVAL, NO_DATA} from "../../constants/Autocomplete";
-import {theme} from "../../constants/Theme";
+import { capitalizeFirstLetter } from "../../utils/string";
+import { styles } from "./Autocomplete.styles";
+import { get } from "../../utils/api";
+import { WAIT_INTERVAL, NO_DATA } from "../../constants/Autocomplete";
+import { theme } from "../../constants/Theme";
 import locales from "../../constants/Locales";
 
 class Autocomplete extends Component {
@@ -30,12 +35,12 @@ class Autocomplete extends Component {
   }
 
   handleInputChange(text) {
-    const {onChangeText, minimumCharactersCount, waitInterval} = this.props;
+    const { onChangeText, minimumCharactersCount, waitInterval } = this.props;
     if (onChangeText) {
       onChangeText(text);
     }
     clearTimeout(this.timer);
-    this.setState({inputValue: text});
+    this.setState({ inputValue: text });
     if (text.length > minimumCharactersCount) {
       this.setState(
         {
@@ -48,27 +53,27 @@ class Autocomplete extends Component {
         },
       );
     } else {
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
   promisifySetState(state) {
     return (
       this.mounted &&
-      new Promise(resolve => this.setState(state, () => resolve()))
+      new Promise((resolve) => this.setState(state, () => resolve()))
     );
   }
 
   async triggerChange() {
-    const {inputValue, items} = this.state;
-    const {fetchData, fetchDataUrl, valueExtractor} = this.props;
+    const { inputValue, items } = this.state;
+    const { fetchData, fetchDataUrl, valueExtractor } = this.props;
     if (fetchData) {
       try {
         const response = await fetchData(inputValue);
         if (response.length && this.mounted) {
-          this.setState({items: response, loading: false});
+          this.setState({ items: response, loading: false });
         } else {
-          this.setState({items: [NO_DATA], loading: false});
+          this.setState({ items: [NO_DATA], loading: false });
         }
         if (this.dropdown.current) {
           this.dropdown.current.onPress(this.container);
@@ -78,11 +83,11 @@ class Autocomplete extends Component {
       }
     } else if (fetchDataUrl) {
       try {
-        const response = await get(fetchDataUrl, {search: inputValue});
+        const response = await get(fetchDataUrl, { search: inputValue });
         if (response.length && this.mounted) {
-          this.setState({items: response, loading: false});
+          this.setState({ items: response, loading: false });
         } else {
-          this.setState({items: [NO_DATA], loading: false});
+          this.setState({ items: [NO_DATA], loading: false });
         }
         if (this.dropdown.current) {
           this.dropdown.current.onPress(this.container);
@@ -91,7 +96,7 @@ class Autocomplete extends Component {
         throw new Error(error);
       }
     } else {
-      const filteredItems = items.filter(item => {
+      const filteredItems = items.filter((item) => {
         return (
           valueExtractor(item)
             .toLowerCase()
@@ -118,26 +123,27 @@ class Autocomplete extends Component {
   }
 
   setItem(value) {
-    const {index, handleSelectItem, valueExtractor, resetOnSelect} = this.props;
+    const { index, handleSelectItem, valueExtractor, resetOnSelect } =
+      this.props;
     handleSelectItem(value, index);
 
     if (resetOnSelect) {
-      this.setState({inputValue: ""});
+      this.setState({ inputValue: "" });
     } else {
       const capitalizedValue = capitalizeFirstLetter(valueExtractor(value));
-      this.setState({inputValue: capitalizedValue});
+      this.setState({ inputValue: capitalizedValue });
     }
   }
 
   clearInput() {
-    this.setState({inputValue: ""});
+    this.setState({ inputValue: "" });
   }
 
   componentDidMount() {
-    const {data} = this.props;
+    const { data } = this.props;
     this.mounted = true;
     if (data) {
-      this.setState({items: data});
+      this.setState({ items: data });
     }
   }
 
@@ -148,14 +154,14 @@ class Autocomplete extends Component {
 
   handleBlur() {
     clearTimeout(this.timer);
-    this.setState({loading: false});
+    this.setState({ loading: false });
     if (this.dropdown.current) {
-      this.dropdown.current.close();
+      //this.dropdown.current.close();
     }
   }
 
   render() {
-    const {inputValue, items, loading, filteredItems} = this.state;
+    const { inputValue, items, loading, filteredItems } = this.state;
     const {
       placeholder,
       scrollToInput,
@@ -179,10 +185,10 @@ class Autocomplete extends Component {
         <View style={[styles.inputContainerStyle, inputContainerStyle]}>
           {renderIcon && renderIcon()}
           <TextInput
-            ref={ref => {
+            ref={(ref) => {
               this.container = ref;
             }}
-            onBlur={event => this.handleBlur(event)}
+            onBlur={(event) => this.handleBlur(event)}
             style={[styles.input, inputStyle]}
             placeholder={placeholder}
             placeholderTextColor={placeholderColor || theme.textSecondary}
@@ -190,8 +196,8 @@ class Autocomplete extends Component {
             value={inputValue}
             autoCorrect={autoCorrect}
             keyboardType={keyboardType}
-            onChangeText={text => this.handleInputChange(text)}
-            onFocus={event => {
+            onChangeText={(text) => this.handleInputChange(text)}
+            onFocus={(event) => {
               if (scrollToInput) {
                 scrollToInput(findNodeHandle(event.target));
               }
@@ -199,7 +205,7 @@ class Autocomplete extends Component {
           />
           {loading && (
             <ActivityIndicator
-              style={[styles.spinner, spinnerStyle]}
+              style={[spinnerStyle]}
               size={spinnerSize}
               color={spinnerColor || theme.primary}
             />

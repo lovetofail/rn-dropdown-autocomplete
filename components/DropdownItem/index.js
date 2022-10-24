@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import React, {PureComponent} from "react";
-import {Keyboard} from 'react-native';
+import React, { PureComponent } from "react";
+import { Keyboard, Platform } from "react-native";
+import { Button } from "react-native-material-buttons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import styles from "./DropdownItem.styles";
-import {theme} from "../../constants/Theme";
+import { theme } from "../../constants/Theme";
 
 export default class DropdownItem extends PureComponent {
   static defaultProps = {
@@ -28,7 +29,7 @@ export default class DropdownItem extends PureComponent {
   }
 
   onPress() {
-    const {onPress, index} = this.props;
+    const { onPress, index } = this.props;
 
     if (typeof onPress === "function") {
       onPress(index);
@@ -37,9 +38,9 @@ export default class DropdownItem extends PureComponent {
   }
 
   render() {
-    const {children, style, ...props} = this.props;
+    const { children, style, ...props } = this.props;
 
-    return (
+    return Platform.OS === "ios" ? (
       <TouchableOpacity
         {...props}
         style={[styles.container, style]}
@@ -47,6 +48,14 @@ export default class DropdownItem extends PureComponent {
       >
         {children}
       </TouchableOpacity>
+    ) : (
+      <Button
+        {...props}
+        style={[styles.container, style]}
+        onPress={this.onPress}
+      >
+        {children}
+      </Button>
     );
   }
 }

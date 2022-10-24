@@ -1,10 +1,10 @@
-import React, {Component} from "react";
-import {Animated, Easing, Keyboard, StyleSheet} from "react-native";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {isIos, isX} from "../../utils/common";
-import {theme} from "../../constants/Theme";
+import React, { Component } from "react";
+import { Animated, Easing, Keyboard, StyleSheet } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { isIos, isX } from "../../utils/common";
+import { theme } from "../../constants/Theme";
 
-const withKeyboardAwareScrollView = WrappedComponent => {
+const withKeyboardAwareScrollView = (WrappedComponent) => {
   return class extends Component {
     constructor(props) {
       super(props);
@@ -68,19 +68,19 @@ const withKeyboardAwareScrollView = WrappedComponent => {
     render() {
       return (
         <KeyboardAwareScrollView
-          innerRef={ref => {
+          innerRef={(ref) => {
             this.scroll = ref;
           }}
           style={styles.container}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{flexGrow: 1}}
-          onMomentumScrollEnd={event => this.handleScroll(event)}
+          contentContainerStyle={{ flexGrow: 1 }}
+          onMomentumScrollEnd={(event) => this.handleScroll(event)}
           scrollEventThrottle={16}
           enableResetScrollToCoords={false}
         >
           <Animated.View
-            style={[styles.container, {paddingBottom: this.keyboardHeight}]}
+            style={[styles.container, { paddingBottom: this.keyboardHeight }]}
           >
             <WrappedComponent
               {...this.props}
@@ -98,7 +98,7 @@ const withKeyboardAwareScrollView = WrappedComponent => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.backgroundPrimary,
+    //    backgroundColor: theme.backgroundPrimary,
     paddingBottom: isX ? 30 : 0,
   },
 });
