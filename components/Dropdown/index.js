@@ -54,7 +54,7 @@ export default class Dropdown extends PureComponent {
     this.renderHeader = this.renderHeader.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { value } = this.props;
     if (nextProps.value !== value) {
       this.setState({ value: nextProps.value });
